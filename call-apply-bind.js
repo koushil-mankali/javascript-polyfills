@@ -3,27 +3,32 @@ let obj = {
     lastName: "mankali"
 }
 
-function func(country, state) {
-    return `The FirstName is ${this.firstName} and the last name is ${this.lastName} and is from country ${country} ${state}`;
+function func(...params) {
+    return `The FirstName is ${this.firstName} and the last name is ${this.lastName} and is from country ${params[0]} ${params[1]}`;
 }
 
 // Call polyfill
-Function.prototype.myCall = function (obj, country, state) {
+Function.prototype.myCall = function (...args) {
+    const obj = args[0]
+    const params = args.slice(1);
     obj.func = this;
-    return obj.func(country, state)
+    return obj.func(...params)
 }
 
 // Apply polyfill
-Function.prototype.myApply = function (obj, args) {
+Function.prototype.myApply = function (...args) {
+    const obj = args[0];
     obj.func = this;
-    return obj.func(...args);
+    return obj.func(...args[1]);
 }
 
 // Bind polyfill
-Function.prototype.myBind = function (obj, country, state) {
+Function.prototype.myBind = function (...args) {
+    const obj = args[0];
+    const params = args.slice(1);
     obj.func = this;
     return function () {
-        return obj.func(country, state);
+        return obj.func(...params);
     };
 }
 
